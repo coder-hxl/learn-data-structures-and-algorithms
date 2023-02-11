@@ -87,8 +87,14 @@ class LinkedList<T> {
     if (position === 0) {
       this.head = current?.next ?? null
     } else {
+      // 获取要删除节点的父节点
       const previous = this.getNode(position - 1)
-      previous!.next = previous?.next?.next ?? null
+
+      // 将要删除节点赋值给 current
+      current = previous!.next
+
+      // 将父节点的 next 指向删除节点的 next
+      previous!.next = current?.next ?? null
     }
 
     this.size--
@@ -154,8 +160,8 @@ linkedList.insert('fuhuan', 6)
 linkedList.traverse()
 
 console.log('------------ removeAt ------------')
-linkedList.removeAt(0)
-linkedList.removeAt(3)
+console.log(linkedList.removeAt(0))
+console.log(linkedList.removeAt(3))
 linkedList.traverse()
 
 console.log('------------ get ------------')

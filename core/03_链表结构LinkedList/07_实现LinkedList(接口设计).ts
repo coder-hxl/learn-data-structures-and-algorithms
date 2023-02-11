@@ -97,8 +97,14 @@ class LinkedList<T> implements ILinkedList<T> {
     if (position === 0) {
       this.head = current?.next ?? null
     } else {
+      // 获取要删除节点的父节点
       const previous = this.getNode(position - 1)
-      previous!.next = previous?.next?.next ?? null
+
+      // 将要删除节点赋值给 current
+      current = previous!.next
+
+      // 将父节点的 next 指向删除节点的 next
+      previous!.next = current?.next ?? null
     }
 
     this.length--
