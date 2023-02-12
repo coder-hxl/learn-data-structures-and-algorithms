@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "hy-algokit": "^1.2.1"
+    "hy-algokit": "^1.3.2"
   }
 }

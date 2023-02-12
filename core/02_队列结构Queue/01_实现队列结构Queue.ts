@@ -1,7 +1,7 @@
 import IQueue from './IQueue'
 
 export default class ArrayQueue<T> implements IQueue<T> {
-  private data: T[] = []
+  protected data: T[] = []
 
   enqueue(value: T): void {
     this.data.push(value)
