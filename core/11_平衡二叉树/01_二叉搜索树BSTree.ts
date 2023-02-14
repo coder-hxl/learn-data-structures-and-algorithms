@@ -19,7 +19,7 @@ export class TreeNode<T> extends Node<T> {
 }
 
 export class BSTree<T> {
-  private root: TreeNode<T> | null = null
+  protected root: TreeNode<T> | null = null
 
   print() {
     btPrint(this.root)
@@ -46,17 +46,25 @@ export class BSTree<T> {
     return null
   }
 
+  protected createNode(value: T): TreeNode<T> {
+    return new TreeNode(value)
+  }
+
+  protected checkBalance(node: TreeNode<T>, isAdd = true) {}
+
   /* 插入操作 */
   // 插入
   insert(value: T) {
     // 1.根据 value 创建新节点
-    const newNode = new TreeNode(value)
+    const newNode = this.createNode(value)
 
     // 2.判断是否有根节点
     if (!this.root) {
       this.root = newNode
     } else {
       this.insertValue(this.root, newNode)
+      // 检测树是否平衡
+      this.checkBalance(newNode)
     }
   }
   private insertValue(node: TreeNode<T>, newNode: TreeNode<T>) {
@@ -66,12 +74,14 @@ export class BSTree<T> {
         this.insertValue(node.left, newNode)
       } else {
         node.left = newNode
+        newNode.parent = node
       }
     } else {
       if (node.right) {
         this.insertValue(node.right, newNode)
       } else {
         node.right = newNode
+        newNode.parent = node
       }
     }
   }
@@ -177,11 +187,15 @@ export class BSTree<T> {
     // 拿到了后继节点
     if (successor !== delNode.right) {
       successor!.parent!.left = successor!.right
-      successor!.right = delNode.right
+      if (successor?.right) {
+        successor.right.parent = successor.parent
+      }
+    } else {
+      delNode.right = successor!.right
+      if (successor?.right) {
+        successor.right.parent = delNode
+      }
     }
-
-    // 将要删除节点的 left 赋值给后继节点的 left
-    successor!.left = delNode.left
 
     return successor!
   }
@@ -191,7 +205,6 @@ export class BSTree<T> {
     if (!current) return false
 
     let replaceNode: TreeNode<T> | null = null
-
     // 2.获取三个东西: 当前节点/父节点/属于父节点的哪边节点
     // 叶子节点/一个子节点/两个子节点
     if (!current.left && !current.right) {
@@ -201,7 +214,11 @@ export class BSTree<T> {
     } else if (!current.right) {
       replaceNode = current.left
     } else {
-      replaceNode = this.getSuccessor(current)
+      const successor = this.getSuccessor(current)
+      current.value = successor.value
+      // 删除完成后, 检测树是否平衡(将删除节点传入)
+      this.checkBalance(successor)
+      return true
     }
 
     if (current === this.root) {
@@ -212,63 +229,14 @@ export class BSTree<T> {
       current.parent!.right = replaceNode
     }
 
+    // 处理 replaceNode 父节点
+    if (replaceNode && current.parent) {
+      replaceNode.parent = current.parent
+    }
+
+    // 删除完成后, 检测树是否平衡(将删除节点传入)
+    this.checkBalance(current, false)
+
     return true
   }
 }
-
-// const bst = new BSTree<number>()
-
-// console.log('---------------- 插入 ----------------')
-// bst.insert(11)
-// bst.insert(7)
-// bst.insert(15)
-// bst.insert(5)
-// bst.insert(3)
-// bst.insert(9)
-// bst.insert(8)
-// bst.insert(10)
-// bst.insert(13)
-// bst.insert(12)
-// bst.insert(14)
-// bst.insert(20)
-// bst.insert(18)
-// bst.insert(25)
-// bst.insert(6)
-// bst.print()
-
-// console.log('---------------- 先序遍历 ----------------')
-// bst.perOrderTraverse()
-
-// console.log('---------------- 后序遍历 ----------------')
-// bst.postOrderTraverse()
-
-// console.log('---------------- 中序遍历 ----------------')
-// bst.inOrderTraverse()
-
-// console.log('---------------- 层序遍历 ----------------')
-// bst.levelOrderTraverse()
-
-// console.log('---------------- 最大值和最小值 ----------------')
-// console.log('max:', bst.getMaxValue(), 'min:', bst.getMinValue())
-
-// console.log('---------------- 搜索 ----------------')
-// console.log(bst.search(9))
-// console.log(bst.search(11))
-// console.log(bst.search(30))
-
-// console.log('---------------- 删除(叶子节点) ----------------')
-// bst.remove(3)
-// bst.remove(10)
-// bst.print()
-
-// console.log('---------------- 删除(一个子节点) ----------------')
-// bst.remove(5)
-// bst.print()
-
-// console.log('---------------- 删除(两个子节点) ----------------')
-// bst.remove(11)
-// bst.print()
-// bst.remove(15)
-// bst.print()
-// bst.remove(7)
-// bst.print()
