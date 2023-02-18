@@ -1,6 +1,6 @@
 import { measureSort, swap, testSort } from 'hy-algokit'
 
-function selectionSort(arr: number[]): number[] {
+export default function selectionSort(arr: number[]): number[] {
   const n = arr.length
 
   // 外循环: 找 n - 1 轮最小值

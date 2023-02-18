@@ -1,6 +1,6 @@
 import { testSort, measureSort } from 'hy-algokit'
 
-function mergeSort(arr: number[]): number[] {
+export default function mergeSort(arr: number[]): number[] {
   if (arr.length === 1) return arr
 
   // 1.分解(divide)

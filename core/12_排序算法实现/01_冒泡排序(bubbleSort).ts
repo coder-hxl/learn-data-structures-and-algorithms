@@ -1,7 +1,7 @@
 import { swap, measureSort, testSort } from 'hy-algokit'
 // import { swap } from './utils'
 
-function bubbleSort(arr: number[]): number[] {
+export default function bubbleSort(arr: number[]): number[] {
   const n = arr.length
 
   // 外循环

@@ -1,6 +1,6 @@
 import { testSort, measureSort, swap } from 'hy-algokit'
 
-function quickSort(arr: number[]): number[] {
+export default function quickSort(arr: number[]): number[] {
   function partition(left: number, right: number) {
     if (left >= right) return
 

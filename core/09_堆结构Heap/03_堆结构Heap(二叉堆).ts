@@ -106,7 +106,7 @@ export default class Heap<T> implements IHeap<T> {
     this.length = arr.length
 
     // 2.从第一个非叶子节点, 开始进行下滤操作
-    const start = Math.floor((this.length - 1) / 2)
+    const start = Math.floor(this.length / 2 - 1)
     for (let i = start; i >= 0; i--) {
       this.heapify_down(i)
     }
